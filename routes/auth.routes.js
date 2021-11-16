@@ -33,6 +33,11 @@ router.post("/signup", (req, res, next) => {
       res.redirect("/");
     })
     .catch((err) => {
+      if (err.code == 11000) {
+        res.render("auth/signup.hbs", {
+          error: "Username is taken, please choose another one",
+        });
+      }
       next(err);
     });
 });
@@ -77,8 +82,8 @@ const checkLogIn = (req, res, next) => {
 };
 
 router.get("/main", checkLogIn, (req, res, next) => {
-    res.render("auth/main");
-  });
+  res.render("auth/main");
+});
 
 router.get("/private", checkLogIn, (req, res, next) => {
   let myUserInfo = req.session.myProperty;
